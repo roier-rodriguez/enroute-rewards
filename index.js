@@ -126,9 +126,11 @@ controller.hears('show leaderboard', 'ambient', function(bot, message) {
       users = Object.keys(snapshot.val());
 
       for (user in users) {
-        var tokens = snapshot.child(users[user]).child('total_coins').val();
-        if (tokens > 0) {
-          leaderboard.push([users[user], tokens]);
+        if( user != 'test_user') {
+          var tokens = snapshot.child(users[user]).child('total_coins').val();
+          if (tokens > 0) {
+            leaderboard.push([users[user], tokens]);
+          }
         }
       }
 
