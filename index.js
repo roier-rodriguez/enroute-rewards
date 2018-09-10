@@ -36,6 +36,14 @@ const token = config.bot_params.keyword,
       regex_mention = /\<\@(\S+)\>/g;
 
 /*--------------------------------------------------------------
+Invalid Users
+--------------------------------------------------------------*/
+var invalidUsers = [
+  'test_user',
+  'USLACKBOT'
+];
+
+/*--------------------------------------------------------------
 Cron
 --------------------------------------------------------------*/
 cron.schedule('59 23 * * ' + config.schedule.days, function() {
@@ -124,9 +132,8 @@ controller.hears('show leaderboard', 'ambient', function(bot, message) {
   db.getUsers()
     .then(function(snapshot) {
       users = Object.keys(snapshot.val());
-
       for (user in users) {
-        if( user != 'test_user') {
+        if( !invalidUsers.includes(users[user]) ) {
           var tokens = snapshot.child(users[user]).child('total_coins').val();
           if (tokens > 0) {
             leaderboard.push([users[user], tokens]);
